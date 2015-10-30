@@ -1,0 +1,8 @@
+[http]
+  proxy = http://[proxy url]:[proxy port]
+[https]
+  proxy = http://[proxy url]:[proxy port]
+[url "https://github.com/"]
+  insteadOf = git@github.com:
+[url "https://github.com"]
+  insteadOf = git://github.com

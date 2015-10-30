@@ -1,0 +1,5 @@
+{
+  "registry": "http://bower.herokuapp.com",
+  "proxy":"http://[proxy url]:[proxy port]",
+  "https-proxy":"http://[proxy url]:[proxy port]"
+}

@@ -1,0 +1,6 @@
+# http://docs.rubygems.org/read/chapter/11
+---
+gem: --no-ri --no-rdoc
+
+# HTTP Proxy options
+http-proxy: http://[proxy url]:[proxy port]
