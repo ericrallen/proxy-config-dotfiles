@@ -17,7 +17,7 @@ As an added bonus, we'll go over configuring some popular text editors to use th
 1. [.gitconfig](#gitconfig)
 1. [.gemrc](#gemrc)
 1. [Other Miscellaneous Notes](#other-misc-notes)
-1. [Text Editors](#text-edtitors)
+1. [Text Editors](#text-editors)
 
 <a href="javascript:void(0);" id="before-we-begin" name="before-we-begin"></a>
 ## Before We Begin
@@ -216,6 +216,14 @@ Below we'll go through the steps to set up the proxy configuration with each edi
 
 Because menu locations can vary depending on Operating System, we will not be explicitly stating the menu tree, but will generally refer to the Settings or Preferences menu depending on the language that the application uses.
 
+#### Editors
+
+- [Sublime Text](#sublime-text)
+- [Atom](#atom)
+- [Brackets](#brackets)
+- [VS Code](#vs-code)
+
+<a href="javascript:void(0);" id="sublime-text" name="sublime-text"></a>
 ### Sublime Text Package Control
 
 Sublime Text's [Package Control](https://packagecontrol.io/) is the plugin that opens up the world of plugins to your editor and, as such, if you want to easily install and update plugins, you'll need it working with the Web Proxy.
@@ -231,6 +239,7 @@ Add the following lines to your `Package Control.sublime-settings` file:
 
 **NOTE**: You may need to do some work to get Package Control to install through your corporate proxy, this basically just entails editing the `urllib.request.ProxyHandler()` to have your proxy information passed into it. You can find some basic information about how to acheive this in the following aritcle: [Install Package Control from behind a proxy](http://michael.laffargue.fr/blog/2014/01/23/install-package-control-behind-proxy-sublimetext3/).
 
+<a href="javascript:void(0);" id="atom" name="atom"></a>
 ### GitHub Atom apm
 
 Atom's `apm` is very similar to `npm`, but doesn't use the proxy settings from your `.npmrc`. Luckily, setting up an `.apmrc` file is just as easy.
@@ -245,6 +254,7 @@ https-proxy=[proxy_url]:[proxy_port]/
 strict-ssl=false
 ```
 
+<a href="javascript:void(0);" id="brackets" name="brackets"></a>
 ### Adobe Brackets
 
 Brackets will need to run through the Web Proxy to install extensions.
@@ -255,6 +265,7 @@ In Brackets, pull up the Preferences `brackets.json` file and add the following 
   "proxy": "[proxy_url]:[proxy_port]/"
 ```
 
+<a href="javascript:void(0);" id="vs-code" name="vs-code"></a>
 ### Visual Studio Code
 
 Visual Studio Code will need to run through the Web Proxy to install extensions.
