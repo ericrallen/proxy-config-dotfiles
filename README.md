@@ -1,22 +1,23 @@
-# Corporate Proxy Information for Front End Developers
+# Dealing with Proxies
 
-This document will help you get set up to use `npm`, `bower`, `gem`, and `git` while going through corporate web proxies. However, if the proxy does not allow connections to the relevant domains, these configuration updates will not help. You will need to get the relevant domains unblocked before being able to use them.
+This document will help you get set up to use `npm`, `bower`, `gem`, and `git` while going through the proxy.
 
-Because bash does not adhere to the global proxy settings for our network connection, we're going to need to configure our environment to use the proxy, and due to inconsistent enforcement of proxy connections amonst these various tools, we cannot just set the `HTTP_PROXY` and `HTTPS_PROXY` environemnt variables and call it a day.
+Because bash does not adhere to the global proxy settings for our network connection, we're going to need to configure our environment to use the proxy, and due to inconsistent enforcement of proxy connections amonst these various tools, we cannot just set the `HTTP_PROXY` and `HTTPS_PROXY` environemnt variables and call it a day. There are also several settings related to how TLS is handled due to the way our proxy implements it's certificate.
 
 We'll also need to provide some GitHub-specific url rewriting for `git` so that we can reliably use `npm` and `bower` to install packages.
 
-**NOTE**: In the following code examples, replace `[proxy url]` with the URL of your proxy and `[proxy port]` with the port for your proxy.
+As an added bonus, we'll go over configuring some popular text editors to use the proxy for their package management features.
 
 ### Table of Contents
 
 1. [Before We Begin](#before-we-begin)
-2. [.bash_profile](#bash-profile)
-3. [.npmrc](#npmrc)
-4. [.bowerrc](#bowerrc)
-5. [.gitconfig](#gitconfig)
-6. [.gemrc](#gemrc)
-7. [Other Miscellaneous Notes](#other-misc-notes)
+1. [.bash_profile](#bash-profile)
+1. [.npmrc](#npmrc)
+1. [.bowerrc](#bowerrc)
+1. [.gitconfig](#gitconfig)
+1. [.gemrc](#gemrc)
+1. [Other Miscellaneous Notes](#other-misc-notes)
+1. [Text Editors](#text-edtitors)
 
 <a href="javascript:void(0);" id="before-we-begin" name="before-we-begin"></a>
 ## Before We Begin
@@ -31,14 +32,20 @@ If you don't have the following files (all located in your home directory, `~/`)
 
 You can create each file using the `touch` command, for example:  `touch ~/.bash_profile` will generate an empty `.bash_profile` file in your home directory, `~/`.
 
-There are example templates for each of these files included in the `/templates/` directory of this repository.
+There are example templates for each of these files included in the `templates/dotfiles` directory.
 
-We'll go over adding the necessary configuration settings to your dotfiles via a text editor and via the command line, where applicable.
+We'll go over adding the necessary configuration settings to your dotfiles via a text editor and via the command line.
+
+There are also example configurations for several popular editors (*Sublime Text, GitHub Atom, Adobe Brackets, and Visual Studio Code*) included in the `templates/editors/` directory. Information about configuring these editors can be found in the [Text Editors](#text-editors) section.
 
 <a href="javascript:void(0);" id="bash-profile" name="bash-profile"></a>
 ## .bash_profile
 
 Your `~/.bash_profile` controls various environment variables and functions available to your shell. In this case we need to set up the environment variables `HTTP_PROXY` and `HTTPS_PROXY`.
+
+There are some `npm` packages that will also require that `node-gyp` download and utilize resources from nodejs.org, but `node-gyp` won't use the TLS settings we are going to configure in our `.npmrc` file below, so you may also need to set the environemnt variable `NODE_TLS_REJECT_UNAUTHORIZED`.
+
+**NOTE**: You can forego setting the `NODE_TLS_REJECT_UNAUTHORIZED` environment variable and opt to just toggle it when you encounter a TLS error with `node-gyp` by running the following command and then performing your `npm install` again: `set NODE_TLS_REJECT_UNAUTHORIZED=0`. This is probably the safer option, but is also more tedious.
 
 After updating your `~/.bash_profile` you will need to `source` it with `source ~/.bash_profile` for the changes to take effect.
 
@@ -46,24 +53,29 @@ After updating your `~/.bash_profile` you will need to `source` it with `source 
 
 ### Text Editor
 
-You'll need to add the following 2 lines to your `~/.bash_profile`:
+You'll need to add the following lines to your `~/.bash_profile`:
 
 ```shell
-export HTTP_PROXY="http://[proxy url]:[proxy port]"
-export HTTPS_PROXY="http://[proxy url]:[proxy port]"
+#proxy config
+export HTTP_PROXY="[proxy_url]:[proxy_port]"
+export HTTPS_PROXY="[proxy_url]:[proxy_port]"
+
+#node-gyp TLS
+export NODE_TLS_REJECT_UNAUTHORIZED=0
 ```
 
 ### Command Line
 
 Run the following commands in your Terminal:
 
-- `echo 'export HTTP_PROXY="http://[proxy url]:[proxy port]"' >> ~/.bash_profile`
-- `echo 'export HTTPS_PROXY="http://[proxy url]:[proxy port]"' >> ~/.bash_profile`
+- `echo 'export HTTP_PROXY="[proxy_url]:[proxy_port]"' >> ~/.bash_profile`
+- `echo 'export HTTPS_PROXY="[proxy_url]:[proxy_port]"' >> ~/.bash_profile`
+- `echo 'export NODE_TLS_REJECT_UNAUTHORIZED=0' >> ~/.bash_profile`
 
 <a href="javascript:void(0);" id="npmrc" name="npmrc"></a>
 ## .npmrc
 
-Your `~/.npmrc` controls configuration options for `npm` and allows you to specify certain settings at a global level. In this case we need to set up the `proxy` and `https-proxy` options and also disable the `strict-ssl` option.
+Your `~/.npmrc` controls configuration options for `npm` and allows you to specify certain settings at a global level. In this case we need to set up the `proxy` and `https-proxy` options and also disable the `strict-ssl` and enable the `unsafe-perm` options.
 
 NPM's documentation has [more information regarding .npmrc files](https://docs.npmjs.com/files/npmrc).
 
@@ -72,18 +84,22 @@ NPM's documentation has [more information regarding .npmrc files](https://docs.n
 You'll need to add the following 3 lines to your `~/.npmrc`:
 
 ```shell
-proxy=http://[proxy url]:[proxy port]/
-https-proxy=http://[proxy url]:[proxy port]/
+registry=http://registry.npmjs.org/
+proxy=[proxy_url]:[proxy_port]/
+https-proxy=[proxy_url]:[proxy_port]/
 strict-ssl=false
+unsafe-perm=true
 ```
 
 ### Command Line
 
 Run the following commands in your Terminal:
 
-- `npm config set proxy http://[proxy url]:[proxy port]/`
-- `npm config set https-proxy http://[proxy url]:[proxy port]/`
+- `npm config set registry http://registry.npmjs.org/`
+- `npm config set proxy [proxy_url]:[proxy_port]/`
+- `npm config set https-proxy [proxy_url]:[proxy_port]/`
 - `npm config set strict-ssl false`
+- `npm config set unsafe-perm true`
 
 <a href="javascript:void(0);" id="bowerrc" name="bowerrc"></a>
 ## .bowerrc
@@ -98,15 +114,15 @@ You'll need to add the following 3 lines to your `~/.bowerrc`:
 
 ```json
   "registry": "http://bower.herokuapp.com",
-  "proxy":"http://[proxy url]:[proxy port]",
-  "https-proxy":"http://[proxy url]:[proxy port]"
+  "proxy":"[proxy_url]:[proxy_port]",
+  "https-proxy":"[proxy_url]:[proxy_port]"
 ```
 
 **NOTE**: `.bowerrc` files are a JSON object so you must have an opening `{` and closing `}` in your file and the file must be valid JSON
 
 ### Command Line
 
-There is not currently a way to generate this configuration via the command line with bower, but the options can be passed to a bower command as CLI arguments like so: `--config.proxy=http://[proxy url]:[proxy port]`.
+There is not currently a way to generate this configuration via the command line with bower, but the options can be passed to a bower command as CLI arguments like so: `--config.proxy=[proxy_url]:[proxy_port]`.
 
 We could try to approach this similarly to the Command Line method for updating your `~/.bash_profile` or `~/.gemrc`, but since this file has to be valid JSON and it's more trouble than it's worth to pass JSON via the Command Line, I recommend just editing it manually.
 
@@ -123,23 +139,29 @@ You'll need to add the following lines to your `~/.gitconfig`:
 
 ```gitconfig
 [http]
-  proxy = http://[proxy url]:[proxy port]
+  proxy = [proxy_url]:[proxy_port]
 [https]
-  proxy = http://[proxy url]:[proxy port]
+  proxy = [proxy_url]:[proxy_port]
 [url "https://github.com/"]
   insteadOf = git@github.com:
 [url "https://github.com"]
   insteadOf = git://github.com
+[url "https://bitbucket.org/"]
+  insteadOf = git@bitbucket.org:
+[url "https://bitbucket.org"]
+  insteadOf = git://bitbucket.org
 ```
 
 ### Command Line
 
 Run the following commands in your Terminal:
 
-- `git config --global http.proxy http://[proxy url]:[proxy port]`
-- `git config --global https.proxy http://[proxy url]:[proxy port]`
+- `git config --global http.proxy [proxy_url]:[proxy_port]`
+- `git config --global https.proxy [proxy_url]:[proxy_port]`
 - `git config --global url"https://github.com/".insteadOf git@github.com:`
 - `git config --global url"https://github.com".insteadOf git://github.com`
+- `git config --global url"https://bitbucket.org/".insteadOf git@bitbucket.org:`
+- `git config --global url"https://bitbucket.org".insteadOf git://bitbucket.org`
 
 <a href="javascript:void(0);" id="gemrc" name="gemrc"></a>
 ## .gemrc
@@ -155,14 +177,14 @@ RubyGems has [more information regarding gem environment options](http://guides.
 You'll need to add the following line to your `~/.gemrc`:
 
 ```yaml
-http-proxy: http://[proxy url]:[proxy port]
+http-proxy: [proxy_url]:[proxy_port]
 ```
 
 ### Command Line
 
 Run the following commands in your Terminal:
 
-- `echo 'http-proxy: http://[proxy url]:[proxy port]/' >> ~/.gemrc`
+- `echo 'http-proxy: [proxy_url]:[proxy_port]/' >> ~/.gemrc`
 
 <a href="javascript:void(0);" id="one-last-step" name="one-last-step"></a>
 ### One Last Step
@@ -182,6 +204,66 @@ Technically, you could add http authentication to your proxy URL in all of these
 - Password must be stored in plaintext in these files
 - Password must be updated in several places whenever you change it
 - Configuration files cannot easily be shared with others because they contain your user id and password
-- The Security team at the company will have a heart attack if they find out
 
-If you want to go this route, the URL will look like this:  `http://[user]:[pass]@[proxy url]:[proxy port]` replaced `[user]` with your user ID and `[pass]` with your current password. However, this is not recommended.
+If you want to go this route, the URL will look like this:  `http://[user]:[pass]@10.43.196.132:8080` replaced `[user]` with your user ID and `[pass]` with your current password. However, this is not recommended.
+
+<a href="javascript:void(0);" id="text-editors" name="text-editors"></a>
+## Text Editors
+
+If your editor has a plugin or update system, you'll need to configure it to run through the web proxy, as well.
+
+Below we'll go through the steps to set up the proxy configuration with each editor.
+
+Because menu locations can vary depending on Operating System, we will not be explicitly stating the menu tree, but will generally refer to the Settings or Preferences menu depending on the language that the application uses.
+
+### Sublime Text Package Control
+
+Sublime Text's [Package Control](https://packagecontrol.io/) is the plugin that opens up the world of plugins to your editor and, as such, if you want to easily install and update plugins, you'll need it working with the Web Proxy.
+
+In Sublime Text, pull up the Preferences menu and then navigate to: `Package Settings > Package Control > Settings - User`.
+
+Add the following lines to your `Package Control.sublime-settings` file:
+
+```json
+  "http_proxy": "[proxy_url]:[proxy_port]",
+  "https_proxy": "[proxy_url]:[proxy_port]"
+```
+
+### GitHub Atom apm
+
+Atom's `apm` is very similar to `npm`, but doesn't use the proxy settings from your `.npmrc`. Luckily, setting up an `.apmrc` file is just as easy.
+
+If you don't have an `~/.atom/.apmrc` file, then go ahead and create one now.
+
+Add the following lines to your `~/.atom/.apmrc` file:
+
+```shell
+proxy=[proxy_url]:[proxy_port]/
+https-proxy=[proxy_url]:[proxy_port]/
+strict-ssl=false
+```
+
+### Adobe Brackets
+
+Brackets will need to run through the Web Proxy to install extensions.
+
+In Brackets, pull up the Preferences `brackets.json` file and add the following line:
+
+```json
+  "proxy": "[proxy_url]:[proxy_port]/"
+```
+
+### Visual Studio Code
+
+Visual Studio Code will need to run through the Web Proxy to install extensions.
+
+In Visual Studio Code, pull up the Preferences menu and then navigate to:  `User Settings`.
+
+Add the following lines to your `settings.json` file:
+
+```json
+  "http.proxy": "[proxy_url]:[proxy_port]/",
+  "http.proxyStrictSSL": false
+```
+
+**Note**: You'll need to have some sort of [credential caching](https://help.github.com/articles/caching-your-github-password-in-git/) for your SSH Key password if you want to use Visual Studio Code's `git` integration with your remote repositories.

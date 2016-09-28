@@ -1,0 +1,4 @@
+{
+  "http_proxy": "[proxy_url]:[proxy_port]",
+  "https_proxy": "[proxy_url]:[proxy_port]"
+}

@@ -1,0 +1,4 @@
+{
+  "http.proxy": "[proxy_url]:[proxy_port]/",
+  "http.proxyStrictSSL": false
+}
