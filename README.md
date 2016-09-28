@@ -229,6 +229,8 @@ Add the following lines to your `Package Control.sublime-settings` file:
   "https_proxy": "[proxy_url]:[proxy_port]"
 ```
 
+**NOTE**: You may need to do some work to get Package Control to install through your corporate proxy, this basically just entails editing the `urllib.request.ProxyHandler()` to have your proxy information passed into it. You can find some basic information about how to acheive this in the following aritcle: [Install Package Control from behind a proxy](http://michael.laffargue.fr/blog/2014/01/23/install-package-control-behind-proxy-sublimetext3/).
+
 ### GitHub Atom apm
 
 Atom's `apm` is very similar to `npm`, but doesn't use the proxy settings from your `.npmrc`. Luckily, setting up an `.apmrc` file is just as easy.
