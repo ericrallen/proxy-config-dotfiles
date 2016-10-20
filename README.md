@@ -158,10 +158,10 @@ Run the following commands in your Terminal:
 
 - `git config --global http.proxy [proxy_url]:[proxy_port]`
 - `git config --global https.proxy [proxy_url]:[proxy_port]`
-- `git config --global url"https://github.com/".insteadOf git@github.com:`
-- `git config --global url"https://github.com".insteadOf git://github.com`
-- `git config --global url"https://bitbucket.org/".insteadOf git@bitbucket.org:`
-- `git config --global url"https://bitbucket.org".insteadOf git://bitbucket.org`
+- `git config --global url.https://github.com/.insteadOf git@github.com:`
+- `git config --global url.https://github.com.insteadOf git://github.com`
+- `git config --global url.https://bitbucket.org/.insteadOf git@bitbucket.org:`
+- `git config --global url.https://bitbucket.org.insteadOf git://bitbucket.org`
 
 <a href="javascript:void(0);" id="gemrc" name="gemrc"></a>
 ## .gemrc
