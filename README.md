@@ -2,7 +2,7 @@
 
 This document will help you get set up to use `npm`, `bower`, `gem`, and `git` while going through the proxy.
 
-Because bash does not adhere to the global proxy settings for our network connection, we're going to need to configure our environment to use the proxy, and due to inconsistent enforcement of proxy connections amonst these various tools, we cannot just set the `HTTP_PROXY` and `HTTPS_PROXY` environemnt variables and call it a day. There are also several settings related to how TLS is handled due to the way our proxy implements it's certificate.
+Because bash does not adhere to the global proxy settings for our network connection, we're going to need to configure our environment to use the proxy, and due to inconsistent enforcement of proxy connections amonst these various tools, we cannot just set the `HTTP_PROXY` and `HTTPS_PROXY` environment variables and call it a day. There are also several settings related to how TLS is handled due to the way our proxy implements it's certificate.
 
 We'll also need to provide some GitHub-specific url rewriting for `git` so that we can reliably use `npm` and `bower` to install packages.
 
@@ -43,7 +43,7 @@ There are also example configurations for several popular editors (*Sublime Text
 
 Your `~/.bash_profile` controls various environment variables and functions available to your shell. In this case we need to set up the environment variables `HTTP_PROXY` and `HTTPS_PROXY`.
 
-There are some `npm` packages that will also require that `node-gyp` download and utilize resources from nodejs.org, but `node-gyp` won't use the TLS settings we are going to configure in our `.npmrc` file below, so you may also need to set the environemnt variable `NODE_TLS_REJECT_UNAUTHORIZED`.
+There are some `npm` packages that will also require that `node-gyp` download and utilize resources from nodejs.org, but `node-gyp` won't use the TLS settings we are going to configure in our `.npmrc` file below, so you may also need to set the environment variable `NODE_TLS_REJECT_UNAUTHORIZED`.
 
 **NOTE**: You can forego setting the `NODE_TLS_REJECT_UNAUTHORIZED` environment variable and opt to just toggle it when you encounter a TLS error with `node-gyp` by running the following command and then performing your `npm install` again: `set NODE_TLS_REJECT_UNAUTHORIZED=0`. This is probably the safer option, but is also more tedious.
 
