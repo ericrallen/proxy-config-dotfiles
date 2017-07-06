@@ -205,7 +205,7 @@ Technically, you could add http authentication to your proxy URL in all of these
 - Password must be updated in several places whenever you change it
 - Configuration files cannot easily be shared with others because they contain your user id and password
 
-If you want to go this route, the URL will look like this:  `http://[user]:[pass]@10.43.196.132:8080` replaced `[user]` with your user ID and `[pass]` with your current password. However, this is not recommended.
+If you want to go this route, the URL will look like this:  `http://[user]:[pass]@[proxy_url]:[proxy_port]` replaced `[user]` with your user ID and `[pass]` with your current password. However, this is not recommended.
 
 <a href="javascript:void(0);" id="text-editors" name="text-editors"></a>
 ## Text Editors
