@@ -2,9 +2,9 @@
 
 This document will help you get set up to use `npm`, `bower`, `gem`, and `git` while going through the proxy.
 
-Because bash does not adhere to the global proxy settings for our network connection, we're going to need to configure our environment to use the proxy, and due to inconsistent enforcement of proxy connections amonst these various tools, we cannot just set the `HTTP_PROXY` and `HTTPS_PROXY` environment variables and call it a day. There are also several settings related to how TLS is handled due to the way our proxy implements it's certificate.
+Because bash does not adhere to the global proxy settings for our network connection, we're going to need to configure our environment to use the proxy, and due to inconsistent enforcement of proxy connections amongst these various tools, we cannot just set the `HTTP_PROXY` and `HTTPS_PROXY` environment variables and call it a day. There are also several settings related to how TLS is handled due to the way our proxy implements its certificate.
 
-We'll also need to provide some GitHub-specific url rewriting for `git` so that we can reliably use `npm` and `bower` to install packages.
+We'll also need to provide some GitHub-specific URL rewriting for `git` so that we can reliably use `npm` and `bower` to install packages.
 
 As an added bonus, we'll go over configuring some popular text editors to use the proxy for their package management features.
 
@@ -118,11 +118,11 @@ You'll need to add the following 3 lines to your `~/.bowerrc`:
   "https-proxy":"[proxy_url]:[proxy_port]"
 ```
 
-**NOTE**: `.bowerrc` files are a JSON object so you must have an opening `{` and closing `}` in your file and the file must be valid JSON
+**NOTE**: `.bowerrc` files are a JSON object so you must have an opening `{` and closing `}` in your file and the file must be valid JSON.
 
 ### Command Line
 
-There is not currently a way to generate this configuration via the command line with bower, but the options can be passed to a bower command as CLI arguments like so: `--config.proxy=[proxy_url]:[proxy_port]`.
+Currently, there is no way to generate this configuration via the command line with bower, but the options can be passed to a bower command as CLI arguments like so: `--config.proxy=[proxy_url]:[proxy_port]`.
 
 We could try to approach this similarly to the Command Line method for updating your `~/.bash_profile` or `~/.gemrc`, but since this file has to be valid JSON and it's more trouble than it's worth to pass JSON via the Command Line, I recommend just editing it manually.
 
@@ -189,7 +189,7 @@ Run the following commands in your Terminal:
 <a href="javascript:void(0);" id="one-last-step" name="one-last-step"></a>
 ### One Last Step
 
-Regardless of which approach you took to setting up your `~/.gemrc` file, make sure you run the commands below in your Terminal
+Regardless of which approach you took to setting up your `~/.gemrc` file, make sure you run the commands below in your Terminal:
 
 - `gem source -r https://rubygems.org/`
 - `gem source -a http://rubygems.org/`
@@ -199,9 +199,9 @@ Regardless of which approach you took to setting up your `~/.gemrc` file, make s
 
 ### HTTP Authentication
 
-Technically, you could add http authentication to your proxy URL in all of these isntances, which will make the proxy automatically authenticate if your authenticated connection has been idle for too long, but this comes with some serious caveats:
+Technically, you could add HTTP authentication to your proxy URL in all of these instances, which will make the proxy automatically authenticate if your authenticated connection has been idle for too long, but this comes with some serious caveats:
 
-- Password must be stored in plaintext in these files
+- Password must be stored in plain text in these files
 - Password must be updated in several places whenever you change it
 - Configuration files cannot easily be shared with others because they contain your user id and password
 
@@ -237,7 +237,7 @@ Add the following lines to your `Package Control.sublime-settings` file:
   "https_proxy": "[proxy_url]:[proxy_port]"
 ```
 
-**NOTE**: You may need to do some work to get Package Control to install through your corporate proxy, this basically just entails editing the `urllib.request.ProxyHandler()` to have your proxy information passed into it. You can find some basic information about how to acheive this in the following aritcle: [Install Package Control from behind a proxy](http://michael.laffargue.fr/blog/2014/01/23/install-package-control-behind-proxy-sublimetext3/).
+**NOTE**: You may need to do some work to get Package Control to install through your corporate proxy, this basically just entails editing the `urllib.request.ProxyHandler()` to have your proxy information passed into it. You can find some basic information about how to achieve this in the following aritcle: [Install Package Control from behind a proxy](http://michael.laffargue.fr/blog/2014/01/23/install-package-control-behind-proxy-sublimetext3/).
 
 <a href="javascript:void(0);" id="atom" name="atom"></a>
 ### GitHub Atom apm
